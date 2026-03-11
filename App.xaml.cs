@@ -434,6 +434,96 @@ public partial class App : Application
         });
     }
 
+    private void UploadPaste()
+    {
+        if (!_settings.IsConfigured)
+        {
+            ShowSettings();
+            return;
+        }
+
+        // Use Dispatcher to ensure we're on the UI thread
+        Current.Dispatcher.Invoke(async () =>
+        {
+            var pasteWindow = new PasteWindow();
+            var result = pasteWindow.ShowDialog();
+            
+            if (result == true && pasteWindow.WasUploaded)
+            {
+                try
+                {
+                    SetUploadingState(true);
+                    
+                    var service = new DigitalOceanService(_settings);
+                    var folder = string.IsNullOrWhiteSpace(_settings.PasteFolder) ? "pastes" : _settings.PasteFolder;
+                    
+                    // Upload paste and get the result
+                    var uploadResult = await service.UploadPasteAsync(
+                        pasteWindow.PasteContent,
+                        pasteWindow.PasteTitle,
+                        pasteWindow.EnableSyntaxHighlighting,
+                        pasteWindow.ShowLineNumbers,
+                        folder,
+                        pasteWindow.UrlSlug
+                    );
+                    
+                    // Calculate content size
+                    var contentBytes = System.Text.Encoding.UTF8.GetByteCount(pasteWindow.PasteContent);
+                    
+                    // Save to database
+                    var record = new UploadRecord
+                    {
+                        FileName = uploadResult.FileName,
+                        Url = uploadResult.Url,
+                        S3Key = uploadResult.S3Key,
+                        Folder = folder,
+                        FileSize = contentBytes,
+                        ContentType = "text/html",
+                        UploadDate = DateTime.Now,
+                        UploadType = "Paste",
+                        ThumbnailData = null // No thumbnail for text pastes
+                    };
+                    
+                    await _databaseService.AddUploadRecordAsync(record);
+                    
+                    // Copy URL to clipboard with retry logic
+                    bool clipboardSuccess = false;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        try
+                        {
+                            Clipboard.Clear();
+                            await Task.Delay(50);
+                            Clipboard.SetText(uploadResult.Url);
+                            clipboardSuccess = true;
+                            break;
+                        }
+                        catch
+                        {
+                            await Task.Delay(100);
+                        }
+                    }
+                    
+                    var displayTitle = string.IsNullOrEmpty(pasteWindow.PasteTitle) 
+                        ? "Text Paste" 
+                        : pasteWindow.PasteTitle;
+                    var message = clipboardSuccess 
+                        ? $"{displayTitle}\nURL copied to clipboard" 
+                        : $"{displayTitle}\nUploaded: {uploadResult.Url}";
+                    _trayIcon?.ShowBalloonTip("Paste Uploaded!", message, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+                }
+                catch (Exception ex)
+                {
+                    _trayIcon?.ShowBalloonTip("Upload Failed", ex.Message, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                }
+                finally
+                {
+                    SetUploadingState(false);
+                }
+            }
+        });
+    }
+
     private void ShowSettings()
     {
         var window = new SettingsWindow(_settingsService, _settings, _databaseService);
@@ -472,6 +562,11 @@ public partial class App : Application
     private void UploadFile_Click(object sender, RoutedEventArgs e)
     {
         UploadFile();
+    }
+
+    private void UploadPaste_Click(object sender, RoutedEventArgs e)
+    {
+        UploadPaste();
     }
 
     private void Settings_Click(object sender, RoutedEventArgs e)

@@ -14,6 +14,7 @@ public class AppSettings
     // Upload Folders
     public string ScreenshotFolder { get; set; } = "caps";
     public string FileFolder { get; set; } = "files";
+    public string PasteFolder { get; set; } = "pastes";
     
     // Filename Templates
     public string ScreenshotFilenameTemplate { get; set; } = "{timestamp}_{random}";

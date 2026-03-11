@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -104,6 +105,47 @@ public class DigitalOceanService
         };
     }
 
+    public async Task<UploadResult> UploadPasteAsync(string content, string title, bool enableSyntaxHighlighting, bool showLineNumbers, string folder = "pastes", string? customSlug = null)
+    {
+        // Generate HTML from the paste content
+        var html = PasteHtmlGenerator.GenerateHtml(content, title, enableSyntaxHighlighting, showLineNumbers);
+        
+        // Generate filename - use custom slug if provided, otherwise use just random ID
+        string fileName;
+        if (!string.IsNullOrWhiteSpace(customSlug))
+        {
+            fileName = $"{customSlug}.html";
+        }
+        else
+        {
+            var baseFileName = FilenameTemplateService.Generate("{random}", "paste");
+            fileName = $"{baseFileName}.html";
+        }
+        
+        var key = string.IsNullOrWhiteSpace(folder) ? fileName : $"{folder.Trim('/')}/{fileName}";
+        
+        // Upload HTML file
+        var htmlBytes = Encoding.UTF8.GetBytes(html);
+        var request = new PutObjectRequest
+        {
+            BucketName = _settings.BucketName,
+            Key = key,
+            InputStream = new MemoryStream(htmlBytes),
+            ContentType = "text/html; charset=utf-8",
+            CannedACL = S3CannedACL.PublicRead
+        };
+
+        var client = GetClient();
+        await client.PutObjectAsync(request);
+
+        return new UploadResult
+        {
+            Url = _settings.GetPublicUrl(key),
+            S3Key = key,
+            FileName = fileName
+        };
+    }
+
     public async Task<bool> DeleteFileAsync(string s3Key)
     {
         try
@@ -177,6 +219,10 @@ public class DigitalOceanService
             "webp" => "image/webp",
             "mp4" => "video/mp4",
             "webm" => "video/webm",
+            "html" or "htm" => "text/html",
+            "txt" => "text/plain",
+            "json" => "application/json",
+            "xml" => "application/xml",
             _ => "application/octet-stream"
         };
     }

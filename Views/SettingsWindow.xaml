@@ -72,6 +72,13 @@
                                        Foreground="Gray" FontSize="11" Margin="0,3,0,0"/>
                         </StackPanel>
 
+                        <StackPanel Margin="0,0,0,10">
+                            <TextBlock Text="Paste Folder" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding PasteFolder, UpdateSourceTrigger=PropertyChanged}" Padding="8"/>
+                            <TextBlock Text="Folder name for text pastes (e.g., pastes, code)" 
+                                       Foreground="Gray" FontSize="11" Margin="0,3,0,0"/>
+                        </StackPanel>
+
                         <TextBlock Text="Filename Templates"
                                    FontSize="14" FontWeight="SemiBold" Margin="0,15,0,10"/>
 
@@ -257,11 +264,12 @@
                             • Full screen capture with customizable hotkey<LineBreak/>
                             • Region selection capture with customizable hotkey<LineBreak/>
                             • Upload any file from your PC via tray menu<LineBreak/>
+                            • Pastebin-like text/code upload with syntax highlighting<LineBreak/>
                             • Automatic upload to DigitalOcean Spaces with public URLs<LineBreak/>
                             • Upload history tracking with SQLite database<LineBreak/>
                             • Customizable filename templates with variables<LineBreak/>
                             • Option to preserve original filenames<LineBreak/>
-                            • Configurable upload folders for screenshots and files<LineBreak/>
+                            • Configurable upload folders for screenshots, files, and pastes<LineBreak/>
                             • Delete files directly from DigitalOcean Spaces<LineBreak/>
                             • Automatic cleanup of old history records<LineBreak/>
                             • Upload status indicator (icon changes color)<LineBreak/>
@@ -274,10 +282,12 @@
                             • Press your full screen hotkey (default: Ctrl+Shift+S) to capture entire screen<LineBreak/>
                             • Press your region hotkey (default: Ctrl+Shift+R) to select a region<LineBreak/>
                             • Right-click tray icon → Upload File... to upload any file<LineBreak/>
+                            • Right-click tray icon → Upload Text/Paste... to share text or code<LineBreak/>
                             • Double-click tray icon for quick full screen capture<LineBreak/>
                             • Right-click tray icon for menu options<LineBreak/>
                             • Screenshots go to your configured screenshot folder (default: caps)<LineBreak/>
-                            • Uploaded files go to your configured file folder (default: files)
+                            • Uploaded files go to your configured file folder (default: files)<LineBreak/>
+                            • Text pastes go to your configured paste folder (default: pastes)
                         </TextBlock>
 
                         <TextBlock Text="Clipboard Monitoring" FontWeight="SemiBold" Margin="0,0,0,5"/>
@@ -290,6 +300,21 @@
                             • Also works when you copy image files in File Explorer<LineBreak/>
                             <LineBreak/>
                             This is perfect for quick sharing - just copy any image and get an instant URL!
+                        </TextBlock>
+
+                        <TextBlock Text="Text/Paste Uploads" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,15">
+                            Share text content like error logs, code snippets, or configuration files:<LineBreak/>
+                            <LineBreak/>
+                            • Right-click tray icon → Upload Text/Paste...<LineBreak/>
+                            • Paste or type your content in the dialog<LineBreak/>
+                            • Optionally add a title for identification<LineBreak/>
+                            • Enable syntax highlighting for code (auto-detects language)<LineBreak/>
+                            • Toggle line numbers on/off<LineBreak/>
+                            • Content is uploaded as an HTML page viewable in any browser<LineBreak/>
+                            • Viewers can copy the content or download as raw text<LineBreak/>
+                            <LineBreak/>
+                            Perfect for sharing error logs with developers or code snippets with colleagues!
                         </TextBlock>
 
                         <TextBlock Text="Filename Templates" FontWeight="SemiBold" Margin="0,0,0,5"/>

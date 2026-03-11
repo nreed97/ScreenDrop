@@ -40,6 +40,9 @@ public partial class SettingsViewModel : ObservableObject
     private string _fileFolder = "files";
 
     [ObservableProperty]
+    private string _pasteFolder = "pastes";
+
+    [ObservableProperty]
     private string _screenshotFilenameTemplate = "{timestamp}_{random}";
 
     [ObservableProperty]
@@ -101,6 +104,7 @@ public partial class SettingsViewModel : ObservableObject
         CustomDomain = settings.CustomDomain;
         ScreenshotFolder = settings.ScreenshotFolder;
         FileFolder = settings.FileFolder;
+        PasteFolder = settings.PasteFolder;
         ScreenshotFilenameTemplate = settings.ScreenshotFilenameTemplate;
         FileFilenameTemplate = settings.FileFilenameTemplate;
         UseOriginalFilename = settings.UseOriginalFilename;
@@ -182,6 +186,7 @@ public partial class SettingsViewModel : ObservableObject
         _settings.CustomDomain = CustomDomain;
         _settings.ScreenshotFolder = ScreenshotFolder;
         _settings.FileFolder = FileFolder;
+        _settings.PasteFolder = PasteFolder;
         _settings.ScreenshotFilenameTemplate = ScreenshotFilenameTemplate;
         _settings.FileFilenameTemplate = FileFilenameTemplate;
         _settings.UseOriginalFilename = UseOriginalFilename;

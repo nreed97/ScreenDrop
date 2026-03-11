@@ -1,0 +1,101 @@
+<Window x:Class="ScreenDrop.Views.PasteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Upload Text/Paste" Height="600" Width="700"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5"
+        ResizeMode="CanResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Upload Text/Paste"
+                   FontSize="16" FontWeight="SemiBold" Margin="0,0,0,15"/>
+
+        <!-- Title/Name Input -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,10">
+            <TextBlock Text="Paste Title (optional):" Margin="0,0,0,5"/>
+            <TextBox x:Name="TitleTextBox" 
+                     Padding="8" 
+                     FontSize="13"
+                     TextChanged="TitleTextBox_TextChanged"
+                     ToolTip="Optional title for your paste (e.g., 'Error Log', 'Config File')"/>
+            
+            <TextBlock Text="Custom URL Slug (optional):" Margin="0,10,0,5"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="UrlSlugTextBox" 
+                         Grid.Column="0"
+                         Padding="8" 
+                         FontSize="13"
+                         ToolTip="Custom URL slug (e.g., 'my-error-log'). Leave empty to auto-generate."/>
+                <TextBlock x:Name="UrlPreviewTextBlock"
+                           Grid.Column="1"
+                           Text=".html"
+                           VerticalAlignment="Center"
+                           Margin="5,0,0,0"
+                           Foreground="Gray"
+                           FontSize="11"/>
+            </Grid>
+            <TextBlock Text="Letters, numbers, hyphens only. Auto-generated from title if empty." 
+                       Foreground="Gray" FontSize="11" Margin="0,3,0,0"/>
+        </StackPanel>
+
+        <!-- Text Content Area -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,10">
+            <TextBlock Text="Text Content:" Margin="0,0,0,5"/>
+            <TextBox x:Name="ContentTextBox"
+                     AcceptsReturn="True"
+                     TextWrapping="NoWrap"
+                     VerticalScrollBarVisibility="Auto"
+                     HorizontalScrollBarVisibility="Auto"
+                     FontFamily="Consolas, Courier New"
+                     FontSize="12"
+                     Padding="10"
+                     Background="White"
+                     Height="Auto"
+                     MinHeight="300"/>
+            <TextBlock x:Name="CharCountTextBlock" 
+                       Text="0 characters" 
+                       FontSize="11" 
+                       Foreground="Gray" 
+                       Margin="0,5,0,0"
+                       HorizontalAlignment="Right"/>
+        </StackPanel>
+
+        <!-- Options -->
+        <StackPanel Grid.Row="3" Margin="0,0,0,15">
+            <CheckBox x:Name="SyntaxHighlightCheckBox" 
+                      Content="Enable syntax highlighting (auto-detect language)"
+                      Margin="0,0,0,5"
+                      IsChecked="True"/>
+            <CheckBox x:Name="LineNumbersCheckBox" 
+                      Content="Show line numbers"
+                      IsChecked="True"/>
+        </StackPanel>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Upload" 
+                    Click="Upload_Click"
+                    Width="100" 
+                    Padding="10,8" 
+                    Background="#0078D4" 
+                    Foreground="White"
+                    Margin="0,0,10,0"/>
+            <Button Content="Cancel" 
+                    Click="Cancel_Click"
+                    Width="100" 
+                    Padding="10,8"/>
+        </StackPanel>
+    </Grid>
+</Window>

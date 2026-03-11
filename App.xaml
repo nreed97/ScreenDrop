@@ -8,6 +8,7 @@
                 <MenuItem Header="Take Screenshot" Click="TakeScreenshot_Click"/>
                 <MenuItem Header="Select Region" Click="SelectRegion_Click"/>
                 <MenuItem Header="Upload File..." Click="UploadFile_Click"/>
+                <MenuItem Header="Upload Text/Paste..." Click="UploadPaste_Click"/>
                 <Separator/>
                 <MenuItem Header="Settings" Click="Settings_Click"/>
                 <Separator/>
