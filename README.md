@@ -1,6 +1,6 @@
 # ScreenDrop
 
-A lightweight Windows desktop application for capturing screenshots and uploading them to DigitalOcean Spaces with automatic URL copying. Built with .NET 8 and WPF.
+A lightweight Windows desktop application for capturing screenshots, uploading files, and sharing text/code snippets to DigitalOcean Spaces with automatic URL copying. Built with .NET 8 and WPF.
 
 ## Features
 
@@ -14,6 +14,17 @@ A lightweight Windows desktop application for capturing screenshots and uploadin
   - Automatic upload to DigitalOcean Spaces
   - Public URL automatically copied to clipboard
   - Visual upload status indicator (blue = idle, orange = uploading)
+
+- **Pastebin/Text Sharing**
+  - Upload text, code, logs, or any text content
+  - Syntax highlighting with Prism.js (200+ languages)
+  - Line numbers with perfect alignment
+  - Custom URL slugs (e.g., `my-error-log.html`)
+  - Short random IDs (e.g., `a3f9k2.html`)
+  - Dark theme with GitHub-inspired design
+  - Copy to clipboard and download raw buttons
+  - Fully responsive for mobile and desktop
+  - Configurable paste folder
 
 - **Clipboard Monitoring**
   - Optional automatic upload when images are copied to clipboard
@@ -76,7 +87,7 @@ A lightweight Windows desktop application for capturing screenshots and uploadin
 4. Configure your preferred settings:
    - Hotkeys
    - Filename templates
-   - Upload folders
+   - Upload folders (screenshots, files, pastes)
    - Clipboard monitoring
    - History retention
 5. Click "Save & Close"
@@ -95,6 +106,24 @@ A lightweight Windows desktop application for capturing screenshots and uploadin
 2. Select "Upload File..."
 3. Choose a file
 4. Public URL will be copied to clipboard automatically
+
+### Uploading Text/Pastes
+
+1. Right-click the ScreenDrop tray icon
+2. Select "Upload Text/Paste..."
+3. Enter your text/code/log content
+4. (Optional) Add a title
+5. (Optional) Enter a custom URL slug for a readable URL
+6. Enable/disable syntax highlighting and line numbers
+7. Click "Upload"
+8. Public URL will be copied to clipboard automatically
+9. Share the URL - viewers can copy or download the content
+
+**Examples:**
+- Share error logs with developers
+- Share code snippets with colleagues
+- Share configuration files
+- Share IRC/chat logs
 
 ### Clipboard Upload
 
@@ -198,6 +227,7 @@ MIT License - feel free to use this project however you'd like.
 - Built with [AWSSDK.S3](https://www.nuget.org/packages/AWSSDK.S3/) for DigitalOcean Spaces integration
 - Uses [Hardcodet.NotifyIcon.Wpf](https://www.nuget.org/packages/Hardcodet.NotifyIcon.Wpf/) for system tray functionality
 - Database management with [Dapper](https://www.nuget.org/packages/Dapper/) and [Microsoft.Data.Sqlite](https://www.nuget.org/packages/Microsoft.Data.Sqlite/)
+- Syntax highlighting powered by [Prism.js](https://prismjs.com/)
 
 ## Support
 
