@@ -44,6 +44,7 @@ public class PasteHtmlGenerator
         htmlBuilder.AppendLine("        .btn:hover { background: #2ea043; }");
         htmlBuilder.AppendLine("        .btn-secondary { background: #21262d; }");
         htmlBuilder.AppendLine("        .btn-secondary:hover { background: #30363d; }");
+        htmlBuilder.AppendLine("        .btn-active { background: #388bfd !important; }");
         htmlBuilder.AppendLine("        .code-container { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: auto; width: 100%; }");
         
         if (showLineNumbers && !enableSyntaxHighlighting)
@@ -57,9 +58,8 @@ public class PasteHtmlGenerator
         }
         else
         {
-            // Prism.js line numbers or no line numbers
             htmlBuilder.AppendLine("        pre { margin: 0 !important; overflow: auto; }");
-            htmlBuilder.AppendLine("        pre[class*=\"language-\"] { margin: 0; padding: 16px; background: #161b22; }");
+            htmlBuilder.AppendLine("        pre[class*=\"language-\"] { margin: 0; background: #161b22; }");
         }
         
         htmlBuilder.AppendLine("        code { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 12px; line-height: 1.5; display: block; white-space: pre; }");
@@ -72,6 +72,14 @@ public class PasteHtmlGenerator
             htmlBuilder.AppendLine("        pre[class*=\"language-\"] { background: #161b22 !important; font-size: 12px !important; }");
             htmlBuilder.AppendLine("        code[class*=\"language-\"] { color: #c9d1d9; font-size: 12px !important; line-height: 1.5 !important; }");
         }
+        
+        // Word wrap state: applied via JS toggle
+        htmlBuilder.AppendLine("        .wrap-on pre,");
+        htmlBuilder.AppendLine("        .wrap-on pre[class*=\"language-\"] { white-space: pre-wrap !important; overflow-x: hidden; word-break: break-all; }");
+        htmlBuilder.AppendLine("        .wrap-on code,");
+        htmlBuilder.AppendLine("        .wrap-on code[class*=\"language-\"] { white-space: pre-wrap !important; word-break: break-all; }");
+        htmlBuilder.AppendLine("        .wrap-on .code-container { overflow-x: hidden; }");
+        htmlBuilder.AppendLine("        .wrap-on .code-content { overflow-x: hidden; }");
         
         htmlBuilder.AppendLine("        .stats { margin-top: 20px; padding: 12px; background: #161b22; border: 1px solid #30363d; border-radius: 6px; font-size: 13px; color: #8b949e; width: 100%; box-sizing: border-box; }");
         
@@ -96,6 +104,7 @@ public class PasteHtmlGenerator
         htmlBuilder.AppendLine("        <div class=\"actions\">");
         htmlBuilder.AppendLine("            <button class=\"btn\" onclick=\"copyToClipboard(event)\">Copy to Clipboard</button>");
         htmlBuilder.AppendLine("            <button class=\"btn btn-secondary\" onclick=\"downloadRaw()\">Download Raw</button>");
+        htmlBuilder.AppendLine("            <button id=\"wrap-btn\" class=\"btn btn-secondary\" onclick=\"toggleWrap(event)\">Word Wrap</button>");
         htmlBuilder.AppendLine("        </div>");
         
         // Count lines accurately - don't count trailing empty lines from trailing newlines
@@ -110,7 +119,6 @@ public class PasteHtmlGenerator
         if (enableSyntaxHighlighting && showLineNumbers)
         {
             // Use Prism.js with built-in line numbers
-            // Use language-markup as default which provides basic highlighting
             htmlBuilder.Append("            <pre class=\"line-numbers\"><code id=\"paste-content\" class=\"language-clike\">");
             htmlBuilder.Append(encodedContent.TrimEnd('\r', '\n'));
             htmlBuilder.AppendLine("</code></pre>");
@@ -172,7 +180,7 @@ public class PasteHtmlGenerator
         htmlBuilder.AppendLine("                btn.style.background = '#2ea043';");
         htmlBuilder.AppendLine("                setTimeout(() => {");
         htmlBuilder.AppendLine("                    btn.textContent = originalText;");
-        htmlBuilder.AppendLine("                    btn.style.background = '#238636';");
+        htmlBuilder.AppendLine("                    btn.style.background = '';");
         htmlBuilder.AppendLine("                }, 2000);");
         htmlBuilder.AppendLine("            }).catch(err => {");
         htmlBuilder.AppendLine("                alert('Failed to copy to clipboard');");
@@ -190,6 +198,12 @@ public class PasteHtmlGenerator
         htmlBuilder.AppendLine("            a.click();");
         htmlBuilder.AppendLine("            document.body.removeChild(a);");
         htmlBuilder.AppendLine("            window.URL.revokeObjectURL(url);");
+        htmlBuilder.AppendLine("        }");
+        htmlBuilder.AppendLine("");
+        htmlBuilder.AppendLine("        function toggleWrap(event) {");
+        htmlBuilder.AppendLine("            const isWrapping = document.body.classList.toggle('wrap-on');");
+        htmlBuilder.AppendLine("            event.target.classList.toggle('btn-active', isWrapping);");
+        htmlBuilder.AppendLine("            if (typeof Prism !== 'undefined') Prism.highlightAll();");
         htmlBuilder.AppendLine("        }");
         htmlBuilder.AppendLine("    </script>");
         htmlBuilder.AppendLine("</body>");
