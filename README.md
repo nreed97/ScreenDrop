@@ -19,10 +19,11 @@ A lightweight Windows desktop application for capturing screenshots, uploading f
   - Upload text, code, logs, or any text content
   - Syntax highlighting with Prism.js (200+ languages)
   - Line numbers with perfect alignment
+  - Word wrap toggle in the viewer (no re-upload needed)
   - Custom URL slugs (e.g., `my-error-log.html`)
   - Short random IDs (e.g., `a3f9k2.html`)
   - Dark theme with GitHub-inspired design
-  - Copy to clipboard and download raw buttons
+  - Copy to clipboard, download raw, and word wrap buttons
   - Fully responsive for mobile and desktop
   - Configurable paste folder
 
@@ -117,7 +118,7 @@ A lightweight Windows desktop application for capturing screenshots, uploading f
 6. Enable/disable syntax highlighting and line numbers
 7. Click "Upload"
 8. Public URL will be copied to clipboard automatically
-9. Share the URL - viewers can copy or download the content
+9. Share the URL - viewers can copy, download, or toggle word wrap
 
 **Examples:**
 - Share error logs with developers
